@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My website</title>
+    <style>
+      #container {
+        width: 50%;
+        margin: auto;
+        border-radius: 15px;
+        padding: 20px;
+        background-color: #f0f0f0;
+      }
+
+      .input-group {
+        margin-bottom: 15px;
+        border-radius: 15px;
+        padding: 10px;
+        background-color: #e0e0e0;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      h2 {
+        font-weight: bold;
+      }
+
+      #buttons {
+        text-align: center;
+      }
+
+      #predict-button,
+      #logout-button {
+        padding: 10px 20px;
+        margin: 0 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      #predict-button {
+        background-color: lightblue;
+      }
+
+      #logout-button {
+        background-color: #ff6347;
+      }
+
+      #output-box {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #e0e0e0;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <br />
+      <p>Hello</p>
+
+      <form onsubmit="handleSubmit(event)">
+        <div class="input-group">
+          <label for="age">Age (in years):</label>
+          <input type="number" name="age" required />
+        </div>
+
+        <div class="input-group">
+          <label for="gender">Gender:</label>
+          <select name="gender" required>
+            <option value="1">Male</option>
+            <option value="0">Female</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="height">Height (cm):</label>
+          <input type="number" name="height" required />
+        </div>
+
+        <div class="input-group">
+          <label for="weight">Weight (kg):</label>
+          <input type="number" name="weight" required />
+        </div>
+
+        <div class="input-group">
+          <label for="ap_hi">Systolic blood pressure (ap_hi):</label>
+          <input type="number" name="ap_hi" required />
+        </div>
+
+        <div class="input-group">
+          <label for="ap_lo">Diastolic blood pressure (ap_lo):</label>
+          <input type="number" name="ap_lo" required />
+        </div>
+
+        <div class="input-group">
+          <label for="cholestrol">Cholesterol level:</label>
+          <select name="cholestrol" required>
+            <option value="1">Normal</option>
+            <option value="2">Above Normal</option>
+            <option value="3">Well Above Normal</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="gluc">Glucose level:</label>
+          <select name="gluc" required>
+            <option value="1">Normal</option>
+            <option value="2">Above Normal</option>
+            <option value="3">Well Above Normal</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="smoke">Smoke:</label>
+          <select name="smoke" required>
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="alco">Alcohol consumption:</label>
+          <select name="alco" required>
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="active">Physical activity:</label>
+          <select name="active" required>
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="bmi">BMI:</label>
+          <input type="number" name="bmi" step="0.01" required />
+        </div>
+
+        <div class="input-group">
+          <label for="bmi_category">BMI Category:</label>
+          <select name="bmi_category" required>
+            <option value="1">Underweight</option>
+            <option value="2">Normal</option>
+            <option value="3">Overweight</option>
+            <option value="4">Obese</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label for="pulse_pressure">Pulse Pressure:</label>
+          <input type="number" name="pulse_pressure" required />
+        </div>
+
+        <div id="buttons">
+          <input type="submit" value="Predict" id="predict-button" />
+          <a href="logout.php" id="logout-button">Logout</a>
+        </div>
+      </form>
+      <div id="output-box">
+        <h2>Prediction Result:</h2>
+        <p style="font-size: 24px" id="prediction-result"></p>
+      </div>
+    </div>
+
+    <script>
+      function handleSubmit(event) {
+        event.preventDefault();
+        const form = event.target;
+        const formData = new FormData(form);
+        const data = {};
+        for (let [key, value] of formData.entries()) {
+          data[key] = value;
+        }
+        console.log(data);
+        fetch("http://127.0.0.1:5000/predict", {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("prediction-result").textContent =
+              data.message;
+          });
+      }
+    </script>
+  </body>
+</html>
